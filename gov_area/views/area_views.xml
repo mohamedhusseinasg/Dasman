@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_area_form" model="ir.ui.view">
+            <field name="name">area.form</field>
+            <field name="model">area</field>
+            <field name="arch" type="xml">
+                <form string="Area">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="gov_id"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_area_tree" model="ir.ui.view">
+            <field name="name">area.tree</field>
+            <field name="model">area</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="gov_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_area" model="ir.actions.act_window">
+            <field name="name">Areas</field>
+            <field name="res_model">area</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="area_menu" name="Areas" parent="stock.menu_stock_config_settings" action="action_area"/>
+    </data>
+</odoo>
