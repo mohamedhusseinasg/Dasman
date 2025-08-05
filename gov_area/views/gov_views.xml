@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_gov_form" model="ir.ui.view">
+            <field name="name">gov.form</field>
+            <field name="model">gov</field>
+            <field name="arch" type="xml">
+                <form string="Governorate">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                        <notebook>
+                            <page string="Areas">
+                                <field name="area_ids">
+                                    <tree editable="bottom">
+                                        <field name="name"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_gov_tree" model="ir.ui.view">
+            <field name="name">gov.tree</field>
+            <field name="model">gov</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_gov" model="ir.actions.act_window">
+            <field name="name">Governorates</field>
+            <field name="res_model">gov</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <menuitem id="gov_menu" name="Governments" parent="stock.menu_stock_config_settings" action="action_gov"/>
+
+    </data>
+</odoo>
