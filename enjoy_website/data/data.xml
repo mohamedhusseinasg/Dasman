@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Sample Governorates -->
+        <record id="gov_cairo" model="gov">
+            <field name="name">Cairo</field>
+        </record>
+        
+        <record id="gov_alexandria" model="gov">
+            <field name="name">Alexandria</field>
+        </record>
+        
+        <record id="gov_giza" model="gov">
+            <field name="name">Giza</field>
+        </record>
+        
+        <!-- Sample Areas -->
+        <record id="area_maadi" model="area">
+            <field name="name">Maadi</field>
+            <field name="gov_id" ref="gov_cairo"/>
+        </record>
+        
+        <record id="area_heliopolis" model="area">
+            <field name="name">Heliopolis</field>
+            <field name="gov_id" ref="gov_cairo"/>
+        </record>
+        
+        <record id="area_montazah" model="area">
+            <field name="name">Montazah</field>
+            <field name="gov_id" ref="gov_alexandria"/>
+        </record>
+        
+        <record id="area_agami" model="area">
+            <field name="name">Agami</field>
+            <field name="gov_id" ref="gov_alexandria"/>
+        </record>
+        
+        <record id="area_6october" model="area">
+            <field name="name">6th October</field>
+            <field name="gov_id" ref="gov_giza"/>
+        </record>
+        
+        <record id="area_sheikh_zayed" model="area">
+            <field name="name">Sheikh Zayed</field>
+            <field name="gov_id" ref="gov_giza"/>
+        </record>
+    </data>
+</odoo>

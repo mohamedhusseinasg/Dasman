@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="home_page" name="Home Page">
+        <t t-call="website.layout">
+
+            <div id="city-popup" class="modal" style="display:block;">
+                <div class="modal-content" style="max-width:400px;margin:auto;padding:20px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.2);background:#fff;">
+                    <h6>Select Your City and Area</h6>
+                    <form>
+                        <label for="city-select" style="font-weight:bold;color:#007bff;">City</label>
+                        <div style="position:relative;margin-bottom:10px;">
+                            <select id="city-select" name="city" style="width:100%;padding:10px 40px 10px 12px;border:1px solid #007bff;border-radius:6px;background:#f8f9fa;appearance:none;">
+                                <option value="">Select City</option>
+                                <t t-foreach="cities" t-as="city">
+                                    <option t-att-value="city.id">
+                                        <t t-esc="city.name"/>
+                                    </option>
+                                </t>
+                            </select>
+                            <span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);color:#007bff;font-size:18px;">
+                                <i class="fa fa-city"></i>
+                            </span>
+                        </div>
+                        <label for="area-select" style="font-weight:bold;color:#007bff;">Area</label>
+                        <div style="position:relative;">
+                            <select id="area-select" name="area" style="width:100%;padding:10px 40px 10px 12px;border:1px solid #007bff;border-radius:6px;background:#f8f9fa;appearance:none;">
+                                <option value="">Select Area</option>
+                                <t t-foreach="areas" t-as="area">
+                                    <option t-att-value="area.id" t-att-data-gov="area.gov_id.id" style="display:none;">
+                                        <t t-esc="area.name"/>
+                                    </option>
+                                </t>
+                            </select>
+
+                        </div>
+
+                        <script>
+                            // Hide popup if selection exists
+                            window.onload = function() {
+                                var city = localStorage.getItem('selected_city');
+                                var area = localStorage.getItem('selected_area');
+                                if (city &amp;&amp; area) {
+                                    document.getElementById('city-popup').style.display = 'none';
+                                }
+                            };
+                        
+                            document.getElementById('city-select').onchange = function() {
+                                var cityId = this.value;
+                                var areaSelect = document.getElementById('area-select');
+                                Array.from(areaSelect.options).forEach(function(opt) {
+                                    if (!opt.value) {
+                                        opt.style.display = '';
+                                        return;
+                                    }
+                                    opt.style.display = (opt.getAttribute('data-gov') === cityId) ? '' : 'none';
+                                });
+                                areaSelect.value = '';
+                            };
+                        
+                            document.querySelector('#city-popup form').onsubmit = function(e){
+                                e.preventDefault();
+                                var cityId = document.getElementById('city-select').value;
+                                var areaId = document.getElementById('area-select').value;
+                                localStorage.setItem('selected_city', cityId);
+                                localStorage.setItem('selected_area', areaId);
+                                document.getElementById('city-popup').style.display = 'none';
+                                
+                                // Redirect to shop with location filter if city is selected
+                                if (cityId) {
+                                    var shopUrl = '/shop?gov_id=' + cityId;
+                                    if (areaId) {
+                                        shopUrl += '&amp;area_id=' + areaId;
+                                    }
+                                    window.location.href = shopUrl;
+                                }
+                            }
+                        </script>
+                        <button type="submit" style="margin-top:10px;width:100%;padding:8px;background:#007bff;color:#fff;border:none;border-radius:5px;">Confirm</button>
+
+                        <!-- Shop link -->
+                        <div style="margin-top:15px;text-align:center;">
+                            <a href="/shop" style="color:#007bff;text-decoration:none;font-size:14px;">
+                                <i class="fa fa-shopping-cart"></i> Browse All Products
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </t>
+
+    </template>
+
+</odoo>

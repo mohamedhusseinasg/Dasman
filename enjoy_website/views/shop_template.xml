@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Extend the shop page to add location filtering -->
+        <template id="shop_location_filter" inherit_id="website_sale.products" name="Shop with Location Filter">
+            <xpath expr="//div[hasclass('o_wsale_products_grid_table_wrapper')]" position="before">
+                <div id="shop-location-popup" class="modal" style="display:block;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.3);z-index:9999;">
+                    <div class="modal-content" style="max-width:400px;margin:60px auto;padding:20px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.2);background:#fff;">
+                        <h5 class="mb-3">Select City and Area</h5>
+                        <form id="shop-location-form">
+                            <div class="form-group mb-3">
+                                <label for="gov-select" class="form-label">Select City</label>
+                                <select id="gov-select" class="form-control" name="gov_id">
+                                    <option value="">All Cities</option>
+                                    <t t-foreach="request.env['gov'].sudo().search([])" t-as="gov">
+                                        <option t-att-value="gov.id" t-att-selected="request.params.get('gov_id') == str(gov.id)">
+                                            <t t-esc="gov.name"/>
+                                        </option>
+                                    </t>
+                                </select>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="area-select" class="form-label">Select Area</label>
+                                <select id="area-select" class="form-control" name="area_id">
+                                    <option value="">All Areas</option>
+                                    <t t-foreach="request.env['area'].sudo().search([])" t-as="area">
+                                        <option t-att-value="area.id" t-att-data-gov="area.gov_id.id" t-att-selected="request.params.get('area_id') == str(area.id)">
+                                            <t t-esc="area.name"/>
+                                        </option>
+                                    </t>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Confirm</button>
+                        </form>
+                    </div>
+                    <script>
+                        // Hide popup if selection exists in localStorage
+                        window.onload = function() {
+                            var city = localStorage.getItem('shop_selected_city');
+                            var area = localStorage.getItem('shop_selected_area');
+                            if (city &amp;&amp;  area) {
+                                document.getElementById('shop-location-popup').style.display = 'none';
+                            }
+                        };
+            
+                        document.getElementById('gov-select').onchange = function() {
+                            var cityId = this.value;
+                            var areaSelect = document.getElementById('area-select');
+                            Array.from(areaSelect.options).forEach(function(opt) {
+                                if (!opt.value) {
+                                    opt.style.display = '';
+                                    return;
+                                }
+                                opt.style.display = (cityId &amp;&amp;  opt.getAttribute('data-gov') === cityId) ? '' : 'none';
+                            });
+                            areaSelect.value = '';
+                        };
+            
+                        document.getElementById('shop-location-form').onsubmit = function(e){
+                            e.preventDefault();
+                            var cityId = document.getElementById('gov-select').value;
+                            var areaId = document.getElementById('area-select').value;
+                            localStorage.setItem('shop_selected_city', cityId);
+                            localStorage.setItem('shop_selected_area', areaId);
+                            document.getElementById('shop-location-popup').style.display = 'none';
+                            // Redirect to shop with location filter
+                            var shopUrl = window.location.pathname + '?gov_id=' + cityId;
+                            if (areaId) {
+                                shopUrl += '&amp;area_id=' + areaId;
+                            }
+                            window.location.href = shopUrl;
+                        }
+                    </script>
+                </div>
+            </xpath>
+        </template>
+
+
+
+
+
+    </data>
+</odoo> 

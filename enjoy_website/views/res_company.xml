@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data>
+        <record id="view_company_form_inherit" model="ir.ui.view">
+            <field name="name">res.company.form.inherit</field>
+            <field name="model">res.company</field>
+            <field name="inherit_id" ref="base.view_company_form"/> 
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='currency_id']" position="after">
+                        <field name="gov_id" />
+                        <field name="area_ids" widget="many2many_tags" options="{'no_create': True}" context="{'default_gov_id': gov_id}">
+                            <tree editable="bottom">
+                                <field name="name"/>
+                                <field name="gov_id"/>
+                            </tree>
+                        </field>
+                </xpath>
+            </field>
+        </record>
+    </data>
+
+</odoo>
